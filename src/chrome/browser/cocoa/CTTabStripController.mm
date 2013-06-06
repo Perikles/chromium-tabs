@@ -198,7 +198,7 @@ private:
 
 - (id)initWithTabStrip:(CTTabStripController*)strip
          tabController:(CTTabController*)controller {
-  if ((self == [super init])) {
+  if (self == [super init]) {
     assert(strip && controller);
     strip_ = strip;
     controller_ = controller;
@@ -414,7 +414,8 @@ private:
 + (CGFloat)defaultIndentForControls {
   // Default indentation leaves enough room so tabs don't overlap with the
   // window controls.
-  return 64.0;
+  //return 64.0;
+  return 70.0;
 }
 
 // Finds the CTTabContentsController associated with the given index into the tab
@@ -922,6 +923,11 @@ private:
 - (void)layoutTabs {
   [self layoutTabsWithAnimation:initialLayoutComplete_ regenerateSubviews:YES];
 }
+
+- (void)layoutTabsWithoutAnimation {
+  [self layoutTabsWithAnimation:NO regenerateSubviews:YES];
+}
+
 
 // Handles setting the title of the tab based on the given |contents|. Uses
 // a canned string if |contents| is NULL.

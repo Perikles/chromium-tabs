@@ -185,6 +185,7 @@ class CTTabStripModel;
 
 // Force the tabs to rearrange themselves to reflect the current model.
 - (void)layoutTabs;
+- (void)layoutTabsWithoutAnimation;
 
 // Are we in rapid (tab) closure mode? I.e., is a full layout deferred (while
 // the user closes tabs)? Needed to overcome missing clicks during rapid tab

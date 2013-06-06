@@ -129,12 +129,12 @@
 }
 
 - (void)removeOverlay {
-  [self setUseOverlay:NO];
   if (closeDeferred_) {
     // See comment in BrowserWindowCocoa::Close() about orderOut:.
     [[self window] orderOut:self];
     [[self window] performClose:self];  // Autoreleases the controller.
   }
+  [self setUseOverlay:NO];
 }
 
 - (void)showOverlay {
@@ -202,7 +202,17 @@
     [window setDelegate:nil];
     [window setContentView:cachedContentView_];
     [self moveViewsBetweenWindowAndOverlay:useOverlay];
-    [window makeFirstResponder:cachedContentView_];
+    // When the last tab of a window is dragged to another window,
+    // the following throws the (silent) exception:
+    // "_newFirstResponderAfterResigining is not a valid message outside
+    // of a responder's implementation of -resignFirstResponder."
+    // This prevents the execution of the following crucial
+    // commands and keeps the overlay window alive for the lifetime
+    // of the application. Even when all windows close in an application
+    // with -applicationShouldTerminateAfterLastWindowClosed returning YES,
+    // the application will not terminate. For now, we let the user take
+    // care of assigning first responder.
+    //[window makeFirstResponder:cachedContentView_];
     [window display];
     [window removeChildWindow:overlayWindow_];
     [overlayWindow_ orderOut:nil];

@@ -10,10 +10,16 @@
 
 typedef enum {
   // Window management commands
+  CTBrowserCommandGoBack                    = 33000,
+  CTBrowserCommandGoForward                 = 33001,
+  CTBrowserCommandReload                    = 33002,
+  CTBrowserCommandReloadIgnoreCache         = 34002,
+  CTBrowserCommandGoHome                    = 33003,
+  CTBrowserCommandNavigate                  = 33004,
   CTBrowserCommandNewWindow                 = 34000,
-  //CTBrowserCommandNewIncognitoWindow       = 34001,
+  CTBrowserCommandNewIncognitoWindow        = 34001,
   CTBrowserCommandCloseWindow               = 34012,
-  //CTBrowserCommandAlwaysOnTop              = 34013,
+  CTBrowserCommandAlwaysOnTop               = 34013,
   CTBrowserCommandNewTab                    = 34014,
   CTBrowserCommandCloseTab                  = 34015,
   CTBrowserCommandSelectNextTab             = 34016,

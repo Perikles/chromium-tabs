@@ -6,21 +6,6 @@
 #import <Cocoa/Cocoa.h>
 #import "scoped_nsobject.h"
 
-// Offset from the top of the window frame to the top of the window controls
-// (zoom, close, miniaturize) for a window with a tabstrip.
-const NSInteger CTWindowButtonsWithTabStripOffsetFromTop = 4;
-
-// Offset from the top of the window frame to the top of the window controls
-// (zoom, close, miniaturize) for a window without a tabstrip.
-const NSInteger CTWindowButtonsWithoutTabStripOffsetFromTop = 4;
-
-// Offset from the left of the window frame to the top of the window controls
-// (zoom, close, miniaturize).
-const NSInteger CTWindowButtonsOffsetFromLeft = 8;
-
-// Offset between the window controls (zoom, close, miniaturize).
-const NSInteger CTWindowButtonsInterButtonSpacing = 7;
-
 // Cocoa class representing a Chrome browser window.
 // We need to override NSWindow with our own class since we need access to all
 // unhandled keyboard events and subclassing NSWindow is the only method to do
@@ -31,19 +16,14 @@ const NSInteger CTWindowButtonsInterButtonSpacing = 7;
   NSButton* closeButton_;
   NSButton* miniaturizeButton_;
   NSButton* zoomButton_;
-  BOOL entered_;
-  scoped_nsobject<NSTrackingArea> widgetTrackingArea_;
+  CGFloat windowButtonsInterButtonSpacing_;
+  BOOL hasTabStrip_;
 }
+
+@property (readonly, nonatomic) CGFloat windowButtonsInterButtonSpacing;
 
 // Tells the window to suppress title drawing.
 - (void)setShouldHideTitle:(BOOL)flag;
-
-// Return true if the mouse is currently in our tracking area for our window
-// widgets.
-- (BOOL)mouseInGroup:(NSButton*)widget;
-
-// Update the tracking areas for our window widgets as appropriate.
-- (void)updateTrackingAreas;
 
 @end
 

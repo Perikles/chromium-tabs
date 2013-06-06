@@ -31,13 +31,12 @@
 #import "cocoa_protocols_mac.h"
 #import "scoped_nsobject.h"
 
-@class FastResizeView;
 @class CTTabStripView;
 @class CTTabView;
 
 @interface CTTabWindowController : NSWindowController<NSWindowDelegate> {
  @private
-  IBOutlet FastResizeView* tabContentArea_;
+  IBOutlet NSView* tabContentArea_;
   // TODO(pinkerton): Figure out a better way to initialize one or the other
   // w/out needing both to be in the nib.
   IBOutlet CTTabStripView* topTabStripView_;
@@ -56,7 +55,7 @@
   BOOL didShowNewTabButtonBeforeTemporalAction_;
 }
 @property(readonly, nonatomic) CTTabStripView* tabStripView;
-@property(readonly, nonatomic) FastResizeView* tabContentArea;
+@property(readonly, nonatomic) NSView* tabContentArea;
 @property(assign, nonatomic) BOOL didShowNewTabButtonBeforeTemporalAction;
 
 // Used during tab dragging to turn on/off the overlay window when a tab

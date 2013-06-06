@@ -4,7 +4,7 @@
 class CTTabStripModel;
 @class CTBrowser;
 
-extern NSString* const CTTabContentsDidCloseNotification;
+extern NSString *const CTTabContentsDidCloseNotification;
 
 //
 // Visibility states:
@@ -147,6 +147,8 @@ extern NSString* const CTTabContentsDidCloseNotification;
 // Called when this tab was teared and just landed in a window. The default
 // implementation makes our view the first responder, restoring focus.
 -(void)tabDidResignTeared;
+
+-(void)tabContentsDidClose:(NSNotification*)notification;
 
 // Called when the frame has changed, which isn't too often.
 // There are at least two cases when it's called:

@@ -1,3 +1,5 @@
+#import "CTBrowser.h"
+#import "CTBrowserWindow.h"
 #import "CTBrowserWindowController.h"
 #import "CTTabStripModel.h"
 #import "CTTabContents.h"
@@ -23,6 +25,11 @@
 - (CGFloat)layoutToolbarAtMinX:(CGFloat)minX
                           maxY:(CGFloat)maxY
                          width:(CGFloat)width;
+@end
+
+@interface CTBrowserWindowController (FullScreen)
+- (void)registerForContentViewResizeNotifications;
+- (void)deregisterForContentViewResizeNotifications;
 @end
 
 @implementation NSDocumentController (CTBrowserWindowControllerAdditions)
@@ -189,10 +196,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 }
 
 
-- (BOOL)isFullscreen {
-  return NO; // TODO
-}
-
 - (BOOL)hasToolbar {
   return !!toolbarController_;
 }
@@ -275,6 +278,13 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   [windowController showWindow:self];
 }
 
+- (IBAction)closeTab:(id)sender {
+	//CTTabStripModel *tabStripModel = browser_.tabStripModel;
+	//  //tabStripModel->CloseAllTabs();
+	//  [tabStripModel closeTabContentsAtIndex:tabStripModel.selected_index
+	//							  closeTypes:CLOSE_CREATE_HISTORICAL_TAB];
+	[browser_ closeTab];
+}
 
 // Called when the user picks a menu or toolbar item when this window is key.
 // Calls through to the browser object to execute the command. This assumes that
@@ -292,15 +302,48 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   if ([sender respondsToSelector:@selector(window)])
     targetController = [[sender window] windowController];
   assert([targetController isKindOfClass:[CTBrowserWindowController class]]);
-  [targetController.browser executeCommand:[sender tag]];
+  // Added support for segmented controls.
+  if ([sender isKindOfClass:[NSSegmentedControl class]]){
+    NSInteger selectedSegment = [sender selectedSegment];
+    NSInteger clickedSegmentTag = [[sender cell] tagForSegment:selectedSegment];
+    [targetController.browser executeCommand:clickedSegmentTag];
+  }
+  else {
+    [targetController.browser executeCommand:[sender tag]];
+  }
 }
 
-
--(IBAction)closeTab:(id)sender {
-  CTTabStripModel *tabStripModel = browser_.tabStripModel;
-  //tabStripModel->CloseAllTabs();
-  tabStripModel->CloseTabContentsAt(tabStripModel->selected_index(),
-                                    CTTabStripModel::CLOSE_CREATE_HISTORICAL_TAB);
+// Same as |-commandDispatch:|, but executes commands using a disposition
+// determined by the key flags. If the window is in the background and the
+// command key is down, ignore the command key, but process any other modifiers.
+- (void)commandDispatchUsingKeyModifiers:(id)sender {
+    if (![sender isEnabled]) {
+        // This code is reachable e.g. if the user mashes the back button, queuing
+        // up a bunch of events before the button's enabled state is updated:
+        // http://crbug.com/63254
+        return;
+    }
+    // See comment above for why we do this.
+    CTBrowserWindowController* targetController = self;
+    if ([sender respondsToSelector:@selector(window)])
+        targetController = [[sender window] windowController];
+    assert([targetController isKindOfClass:[CTBrowserWindowController class]]);
+    NSInteger command;
+    // Added support for segmented controls.
+    if ([sender isKindOfClass:[NSSegmentedControl class]]){
+        NSInteger selectedSegment = [sender selectedSegment];
+        NSInteger clickedSegmentTag = [[sender cell] tagForSegment:selectedSegment];
+        command = clickedSegmentTag;
+    }
+    else {
+        command = [sender tag];
+    }
+    NSUInteger modifierFlags = [[NSApp currentEvent] modifierFlags];
+    if ((command == CTBrowserCommandReload) &&
+        (modifierFlags & (NSShiftKeyMask | NSControlKeyMask))) {
+        command = CTBrowserCommandReloadIgnoreCache;
+    }
+    [targetController.browser executeCommand:command];
 }
 
 
@@ -319,6 +362,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   return YES;
 }
 
+#pragma mark -
+#pragma mark Tab Management
 
 // Move a given tab view to the location of the current placeholder. If there is
 // no placeholder, it will go at the end. |controller| is the window controller
@@ -388,11 +433,6 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 - (NSView*)selectedTabView {
   return [tabStripController_ selectedTabView];
-}
-
-
-- (void)layoutTabs {
-  [tabStripController_ layoutTabs];
 }
 
 
@@ -490,12 +530,12 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 // Default implementation of the below are both YES. Until we have fullscreen
 // support these will always be true.
-/*- (BOOL)tabTearingAllowed {
+- (BOOL)tabTearingAllowed {
   return ![self isFullscreen];
 }
 - (BOOL)windowMovementAllowed {
   return ![self isFullscreen];
-}*/
+}
 
 - (BOOL)isTabFullyVisible:(CTTabView*)tab {
 	return [tabStripController_ isTabFullyVisible:tab];
@@ -555,6 +595,62 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   return NO;
 }
 
+-(void)willStartTearingTab {
+	CTTabContents* contents = [browser_ selectedTabContents];
+	if (contents) {
+		contents.isTeared = YES;
+	}
+}
+
+-(void)willEndTearingTab {
+	CTTabContents* contents = [browser_ selectedTabContents];
+	if (contents) {
+		contents.isTeared = NO;
+	}
+}
+
+-(void)didEndTearingTab {
+	CTTabContents* contents = [browser_ selectedTabContents];
+	if (contents) {
+		[contents tabDidResignTeared];
+	}
+    
+    // I didn't get deep into this (this the first time I
+    // lay hands on an Objective-C project), but we are
+    // no longer assigned as delegate for the new teared
+    // window. As a result, we do not receive full screen
+    // notifications. We restore ourselves as delegate
+    // or else proper layout won't work.
+    if ( [[self window] delegate] != self )
+        [[self window] setDelegate:self];
+}
+
+- (void)focusTabContents {
+	CTTabContents* contents = [browser_ selectedTabContents];
+	if (contents) {
+		[[self window] makeFirstResponder:contents.view];
+	}
+}
+
+#pragma mark -
+#pragma mark Layout
+
+- (void)layoutTabContentArea:(NSRect)newFrame {
+	NSView* tabContentView = self.tabContentArea;
+	NSRect tabContentFrame = tabContentView.frame;
+	BOOL contentShifted =
+    NSMaxY(tabContentFrame) != NSMaxY(newFrame) ||
+    NSMinX(tabContentFrame) != NSMinX(newFrame);
+	tabContentFrame = newFrame;
+	[tabContentView setFrame:tabContentFrame];
+	// If the relayout shifts the content area up or down, let the renderer know.
+	if (contentShifted) {
+		CTTabContents* contents = [browser_ selectedTabContents];
+		if (contents) {
+			[contents viewFrameDidChange:newFrame];
+		}
+	}
+}
 
 // Called when the size of the window content area has changed.
 // Position specific views.
@@ -590,7 +686,9 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     // with higher values, and then lay out the tab strip.
     NSRect windowFrame = [contentView convertRect:[window frame] fromView:nil];
     startMaxY = maxY = NSHeight(windowFrame) + yOffset;
-    maxY = [self layoutTabStripAtMaxY:maxY width:width fullscreen:isFullscreen];
+    maxY = [self layoutTabStripAtMaxY:maxY
+                 width:width
+                 fullscreen:isFullscreen];
   }
 
   // Sanity-check |maxY|.
@@ -630,8 +728,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   // If in fullscreen mode, reset |maxY| to top of screen, so that the floating
   // bar slides over the things which appear to be in the content area.
-  if (isFullscreen)
-    maxY = NSMaxY(contentBounds);
+//  if (isFullscreen)
+//    maxY = NSMaxY(contentBounds);
 
   // Also place the infobar container immediate below the toolbar, except in
   // fullscreen mode in which case it's at the top of the visual content area.
@@ -675,43 +773,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 }
 
 
--(void)willStartTearingTab {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
-    contents.isTeared = YES;
-  }
-}
-
--(void)willEndTearingTab {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
-    contents.isTeared = NO;
-  }
-}
-
--(void)didEndTearingTab {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
-    [contents tabDidResignTeared];
-  }
-}
-
-
-#pragma mark -
-#pragma mark Layout
-
-
-- (void)layoutTabContentArea:(NSRect)newFrame {
-  FastResizeView* tabContentView = self.tabContentArea;
-  NSRect tabContentFrame = tabContentView.frame;
-  BOOL contentShifted =
-      NSMaxY(tabContentFrame) != NSMaxY(newFrame) ||
-      NSMinX(tabContentFrame) != NSMinX(newFrame);
-  tabContentFrame.size.height = newFrame.size.height;
-  [tabContentView setFrame:tabContentFrame];
-  // If the relayout shifts the content area up or down, let the renderer know.
-  if (contentShifted) {
-    if (CTTabContents* contents = [browser_ selectedTabContents]) {
-      [contents viewFrameDidChange:newFrame];
-    }
-  }
+- (void)layoutTabs {
+    [tabStripController_ layoutTabs];
 }
 
 
@@ -737,7 +800,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
   // TODO(viettrungluu): Seems kind of bad -- shouldn't |-layoutSubviews| do
   // this? Moreover, |-layoutTabs| will try to animate....
-  [tabStripController_ layoutTabs];
+  [tabStripController_ layoutTabsWithoutAnimation];
 
   // Now lay out incognito badge together with the tab strip.
   //if (incognitoBadge_.get()) {
@@ -767,15 +830,31 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   //       orderOut:
 
   if (browser_.tabStripModel->HasNonPhantomTabs()) {
+    // We are prematurely released at -windowDidResignMain.
+    // Prevent this.
+    if ( [self retainCount] == 1 ) {
+      closingTabs_ = YES;
+      [self retain];
+    }
     // Tab strip isn't empty.  Hide the frame (so it appears to have closed
     // immediately) and close all the tabs, allowing them to shut down. When the
     // tab strip is empty we'll be called back again.
     [[self window] orderOut:self];
-    [browser_ windowDidBeginToClose];
+      
+    if (browser_) {
+      [browser_ windowDidBeginToClose];
+    }
+    
     if (_currentMain == self) {
       ct_casid(&_currentMain, nil);
     }
+      
     return NO;
+  }
+    
+  if ( closingTabs_ ) {
+    closingTabs_ = NO;
+    [self release];
   }
 
   // the tab strip is empty, it's ok to close the window
@@ -805,7 +884,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 }
 
 - (void)windowDidResignMain:(NSNotification*)notification {
-  if (_currentMain == self) {
+  if ( _currentMain == self ) {
     ct_casid(&_currentMain, nil);
   }
 
@@ -953,15 +1032,9 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   [[self window] makeKeyAndOrderFront:self];
 }
 
-- (void)focusTabContents {
-  if (CTTabContents* contents = [browser_ selectedTabContents]) {
-    [[self window] makeFirstResponder:contents.view];
-  }
-}
-
 
 #pragma mark -
-#pragma mark CTTabStripModelObserverBridge impl.
+#pragma mark CTTabStripModel Observer
 
 // Note: the following are called by the CTTabStripModel and thus indicate
 // the model's state rather than the UI state. This means that when for instance
@@ -1033,6 +1106,89 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 
 - (void)tabStripEmpty {
   [self close];
+}
+
+#pragma mark -
+#pragma mark Fullscreen
+
+- (void)contentViewDidResize:(NSNotification*)notification {
+	[self layoutSubviews];
+}
+
+// Register or deregister for content view resize notifications.  These
+// notifications are used while transitioning to fullscreen mode in Lion or
+// later.  This method is safe to call on all OS versions.
+- (void)registerForContentViewResizeNotifications {
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(contentViewDidResize:)
+												 name:NSViewFrameDidChangeNotification
+											   object:[[self window] contentView]];
+}
+
+- (void)deregisterForContentViewResizeNotifications {
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:NSViewFrameDidChangeNotification
+												  object:[[self window] contentView]];
+}
+
+// On Lion, this method is called by either the Lion fullscreen button or the
+// "Enter Full Screen" menu item.  On Snow Leopard, this function is never
+// called by the UI directly, but it provides the implementation for
+// |-setPresentationMode:|.
+- (void)setFullscreen:(BOOL)fullscreen {
+	if (fullscreen == [self isFullscreen])
+		return;
+    
+	enteredPresentationModeFromFullscreen_ = YES;
+	[self.window toggleFullScreen:nil];
+}
+
+- (BOOL)isFullscreen {
+	return ([[self window] styleMask] & NSFullScreenWindowMask) || enteringFullscreen_;
+}
+
+
+- (void)windowWillEnterFullScreen:(NSNotification*)notification {
+	[self registerForContentViewResizeNotifications];
+    
+    //	NSWindow* window = [self window];
+    //	savedRegularWindowFrame_ = [window frame];
+    //	BOOL mode = [self shouldUsePresentationModeWhenEnteringFullscreen];
+    //	mode = mode || browser_->IsFullscreenForTabOrPending();
+	enteringFullscreen_ = YES;
+    //	[self setPresentationModeInternal:mode forceDropdown:NO];
+}
+
+- (void)windowDidEnterFullScreen:(NSNotification*)notification {
+	[self deregisterForContentViewResizeNotifications];
+	enteringFullscreen_ = NO;
+    //	[self showFullscreenExitBubbleIfNecessary];
+}
+
+- (void)windowWillExitFullScreen:(NSNotification*)notification {
+	[self registerForContentViewResizeNotifications];
+    //	[self destroyFullscreenExitBubbleIfNecessary];
+    //	[self setPresentationModeInternal:NO forceDropdown:NO];
+}
+
+- (void)windowDidExitFullScreen:(NSNotification*)notification {
+	[self deregisterForContentViewResizeNotifications];
+}
+
+- (void)windowDidFailToEnterFullScreen:(NSWindow*)window {
+	[self deregisterForContentViewResizeNotifications];
+	enteringFullscreen_ = NO;
+    //	[self setPresentationModeInternal:NO forceDropdown:NO];
+    
+	// Force a relayout to try and get the window back into a reasonable state.
+	[self layoutSubviews];
+}
+
+- (void)windowDidFailToExitFullScreen:(NSWindow*)window {
+	[self deregisterForContentViewResizeNotifications];
+    
+	// Force a relayout to try and get the window back into a reasonable state.
+	[self layoutSubviews];
 }
 
 

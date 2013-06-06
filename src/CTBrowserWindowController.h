@@ -21,12 +21,22 @@
   CTToolbarController *toolbarController_;
  @private
   BOOL initializing_; // true if the instance is initializing
+  // Tracks whether presentation mode was entered from fullscreen mode or
+  // directly from normal windowed mode.  Used to determine what to do when
+  // exiting presentation mode.
+  BOOL enteredPresentationModeFromFullscreen_;
+  // True between -windowWillEnterFullScreen and -windowDidEnterFullScreen.
+  // Only used on Lion.
+  BOOL enteringFullscreen_;
+  // True at -windowShouldClose.
+  BOOL closingTabs_;
 }
 
 @property(readonly, nonatomic) CTTabStripController *tabStripController;
 @property(readonly, nonatomic) CTToolbarController *toolbarController;
 @property(readonly, nonatomic) CTBrowser *browser;
 @property(readonly, nonatomic) BOOL isFullscreen; // fullscreen or not
+
 
 // Called to check whether or not this window has a toolbar. By default returns
 // true if toolbarController_ is not nil.
@@ -79,5 +89,8 @@
 // Lays out the tab content area in the given frame. If the height changes,
 // sends a message to the renderer to resize.
 - (void)layoutTabContentArea:(NSRect)frame;
+
+// Returns fullscreen state.  This method is safe to call on all OS versions.
+- (BOOL)isFullscreen;
 
 @end

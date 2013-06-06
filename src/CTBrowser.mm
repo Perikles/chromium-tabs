@@ -402,7 +402,7 @@
 // Creates an entry in the historical tab database for the specified
 // CTTabContents.
 -(void)createHistoricalTab:(CTTabContents*)contents {
-  DLOG("[ChromiumTabs] TODO createHistoricalTab %@", contents);
+  //DLOG("[ChromiumTabs] TODO createHistoricalTab %@", contents);
 }
 
 // Runs any unload listeners associated with the specified CTTabContents before

@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		3A3ED8A71225DF45009E2908 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		3A3ED9BE1225E320009E2908 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		3A3ED9BF1225E320009E2908 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A286EA51222C8EA00F1BB78 /* Carbon.framework */; };
-		3A3ED9C01225E320009E2908 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A3ED9751225E0A7009E2908 /* QuartzCore.framework */; };
 		3A3ED9C11225E32A009E2908 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A1168C21225404F00757641 /* common.c */; };
 		3A3ED9C21225E32A009E2908 /* common.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A1168C41225404F00757641 /* common.mm */; };
 		3A3ED9C41225E32A009E2908 /* hover_close_button.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A3921F01221AF58006D8305 /* hover_close_button.mm */; };
@@ -126,6 +124,8 @@
 		3ABF4A8B12A461630020233C /* scoped_nsautorelease_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A8C12A461630020233C /* scoped_nsautorelease_pool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8A12A461630020233C /* scoped_nsautorelease_pool.mm */; };
 		3ABF4AAC12A465100020233C /* KVOChangeScope.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4AAB12A464F50020233C /* KVOChangeScope.hh */; settings = {ATTRIBUTES = (Public, ); }; };
+		ECE13FBB175498F8008A1999 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE13FBA175498F8008A1999 /* Carbon.framework */; };
+		ECE13FBD17549912008A1999 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE13FBC17549912008A1999 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,7 +173,6 @@
 		3A236DD71223414F00D21E66 /* new_tab_button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = new_tab_button.h; sourceTree = "<group>"; };
 		3A236DD81223414F00D21E66 /* new_tab_button.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = new_tab_button.mm; sourceTree = "<group>"; };
 		3A286E8C1222C63D00F1BB78 /* CTTabControllerTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabControllerTarget.h; sourceTree = "<group>"; };
-		3A286EA51222C8EA00F1BB78 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		3A286F8B1222CAA000F1BB78 /* CTTabStripView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabStripView.h; sourceTree = "<group>"; };
 		3A286F8C1222CAA000F1BB78 /* CTTabStripView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabStripView.mm; sourceTree = "<group>"; };
 		3A286F8D1222CAA000F1BB78 /* CTTabWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabWindowController.h; sourceTree = "<group>"; };
@@ -231,7 +230,6 @@
 		3A3ED74F1225DDF2009E2908 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		3A3ED7671225DF06009E2908 /* GTMFadeTruncatingTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMFadeTruncatingTextFieldCell.h; sourceTree = "<group>"; };
 		3A3ED7681225DF06009E2908 /* GTMFadeTruncatingTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMFadeTruncatingTextFieldCell.m; sourceTree = "<group>"; };
-		3A3ED9751225E0A7009E2908 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3A3ED97D1225E116009E2908 /* ChromiumTabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromiumTabs.h; sourceTree = "<group>"; };
 		3A3ED9831225E27E009E2908 /* ChromiumTabs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChromiumTabs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A3ED9841225E27E009E2908 /* ChromiumTabs-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ChromiumTabs-Info.plist"; sourceTree = "<group>"; };
@@ -282,6 +280,8 @@
 		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
 		3AEE19531222DDEB009DA438 /* CTTabContents.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabContents.mm; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECE13FBA175498F8008A1999 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
+		ECE13FBC17549912008A1999 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,8 +290,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A3ED9BE1225E320009E2908 /* Cocoa.framework in Frameworks */,
-				3A3ED9BF1225E320009E2908 /* Carbon.framework in Frameworks */,
-				3A3ED9C01225E320009E2908 /* QuartzCore.framework in Frameworks */,
+				ECE13FBB175498F8008A1999 /* Carbon.framework in Frameworks */,
+				ECE13FBD17549912008A1999 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,11 +384,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3A286EA51222C8EA00F1BB78 /* Carbon.framework */,
+				ECE13FBC17549912008A1999 /* QuartzCore.framework */,
+				ECE13FBA175498F8008A1999 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
-				3A3ED9751225E0A7009E2908 /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -692,6 +692,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "chromium-tabs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -845,6 +846,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -867,8 +869,9 @@
 				HEADER_SEARCH_PATHS = src;
 				INFOPLIST_FILE = "resources/ChromiumTabs-Info.plist";
 				INSTALL_PATH = "@rpath";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = ChromiumTabs;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -876,6 +879,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -902,7 +906,7 @@
 				HEADER_SEARCH_PATHS = src;
 				INFOPLIST_FILE = "resources/ChromiumTabs-Info.plist";
 				INSTALL_PATH = "@rpath";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -911,6 +915,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = ChromiumTabs;
+				SDKROOT = macosx10.7;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -919,6 +924,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_CW_ASM_SYNTAX = NO;
@@ -944,13 +950,13 @@
 				INFOPLIST_FILE = "examples/simple-app/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-fvisibility=hidden",
 					"$(OTHER_CFLAGS)",
 				);
 				PRODUCT_NAME = "Chromium Tabs";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -958,6 +964,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_CW_ASM_SYNTAX = NO;
@@ -981,13 +988,13 @@
 				INFOPLIST_FILE = "examples/simple-app/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-fvisibility=hidden",
 					"$(OTHER_CFLAGS)",
 				);
 				PRODUCT_NAME = "Chromium Tabs";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -999,9 +1006,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -1012,8 +1020,9 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};

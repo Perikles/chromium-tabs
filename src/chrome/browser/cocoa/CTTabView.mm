@@ -215,7 +215,7 @@ const CGFloat kRapidCloseDist = 2.5;
   dragOverlay_ = nil;
   ct_objc_xch(&sourceController_, nil);
   sourceWindow_ = nil;
-  //ct_objc_xch(&targetController_, nil);
+  ct_objc_xch(&targetController_, nil);
   targetController_ = nil;
   workspaceIDCache_.clear();
 }
@@ -610,7 +610,8 @@ const CGFloat kRapidCloseDist = 2.5;
       // loop.
       [[targetController_ window] display];
       [targetController_ showWindow:nil];
-      //[draggedController_ removeOverlay]; // <- causes an exception
+      [draggedController_ deferPerformClose];
+      [draggedController_ removeOverlay];
       //DLOG_EXPR(targetController_);
       [targetController_ didEndTearingTab];
     } else {

@@ -14,6 +14,10 @@
   //[windowController autorelease];
 }
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+  return YES;
+}
+
 // When there are no windows in our application, this class (AppDelegate) will
 // become the first responder. We forward the command to the browser class.
 - (void)commandDispatch:(id)sender {
