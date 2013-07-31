@@ -12,7 +12,6 @@
 @synthesize windowController = windowController_;
 @synthesize tabStripModel = tabStripModel_;
 
-
 /*- (id)retain {
   self = [super retain];
   NSLog(@"%@  did retain  (retainCount: %u)", self, [self retainCount]);
@@ -31,11 +30,22 @@
   return [[[self alloc] init] autorelease];
 }
 
++ (CTBrowser*)browserWithMode:(BOOL)offTheRecord {
+  return [[[self alloc] initWithMode:offTheRecord] autorelease];
+}
 
 - (id)init {
   if ((self = [super init])) {
     tabStripModel_ = new CTTabStripModel(self);
   }
+  return self;
+}
+
+- (id)initWithMode:(BOOL)offTheRecord {
+  if ((self = [super init])) {
+    tabStripModel_ = new CTTabStripModel(self);
+  }
+  offTheRecord_ = offTheRecord;
   return self;
 }
 
@@ -228,6 +238,11 @@
 
 -(CTTabContents*)addBlankTab {
   return [self addBlankTabInForeground:YES];
+}
+
+// subclasses should override this
+-(BOOL)isOffTheRecord {
+  return offTheRecord_;
 }
 
 -(void)closeTab {

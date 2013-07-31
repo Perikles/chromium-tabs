@@ -124,6 +124,7 @@
 		3ABF4A8B12A461630020233C /* scoped_nsautorelease_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A8C12A461630020233C /* scoped_nsautorelease_pool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8A12A461630020233C /* scoped_nsautorelease_pool.mm */; };
 		3ABF4AAC12A465100020233C /* KVOChangeScope.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4AAB12A464F50020233C /* KVOChangeScope.hh */; settings = {ATTRIBUTES = (Public, ); }; };
+		ECCA546717A3EACF0039769F /* otr_icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = ECCA546617A3EACF0039769F /* otr_icon.pdf */; };
 		ECE13FBB175498F8008A1999 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE13FBA175498F8008A1999 /* Carbon.framework */; };
 		ECE13FBD17549912008A1999 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE13FBC17549912008A1999 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
@@ -280,6 +281,7 @@
 		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
 		3AEE19531222DDEB009DA438 /* CTTabContents.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabContents.mm; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECCA546617A3EACF0039769F /* otr_icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = otr_icon.pdf; sourceTree = "<group>"; };
 		ECE13FBA175498F8008A1999 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
 		ECE13FBC17549912008A1999 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -396,6 +398,7 @@
 		3A286FF01222D61D00F1BB78 /* gfx */ = {
 			isa = PBXGroup;
 			children = (
+				ECCA546617A3EACF0039769F /* otr_icon.pdf */,
 				3A3ED35012256F06009E2908 /* throbber.png */,
 				3A286FFD1222D99B00F1BB78 /* sadfavicon.png */,
 				3A286FFA1222D94600F1BB78 /* throbber_waiting.png */,
@@ -731,6 +734,7 @@
 				3A3ED9F11225E3C2009E2908 /* throbber.png in Resources */,
 				3A3EDAA91225F192009E2908 /* Localizable.strings in Resources */,
 				3A92907612295BC400DA7E43 /* Toolbar.xib in Resources */,
+				ECCA546717A3EACF0039769F /* otr_icon.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

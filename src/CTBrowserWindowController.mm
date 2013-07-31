@@ -10,6 +10,7 @@
 #import "CTToolbarController.h"
 #import "CTUtil.h"
 #import "fast_resize_view.h"
+#import "NSImage+CTAdditions.h"
 
 #import "scoped_nsdisable_screen_updates.h"
 
@@ -42,6 +43,17 @@
 @end
 
 static CTBrowserWindowController* _currentMain = nil; // weak
+
+// IncognitoImageView subclasses NSImageView to allow mouse events to pass
+// through it so you can drag the window by dragging on the spy guy
+@interface IncognitoImageView : NSImageView
+@end
+
+@implementation IncognitoImageView
+- (BOOL)mouseDownCanMoveWindow {
+    return YES;
+}
+@end
 
 @implementation CTBrowserWindowController
 
@@ -120,6 +132,9 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   // Note: when using the default BrowserWindow.xib, window bounds are saved and
   // restored by Cocoa using NSUserDefaults key "browserWindow".
 
+  // Puts the incognito badge on the window frame, if necessary.
+  [self installIncognitoBadge];
+    
   // Create a tab strip controller
   tabStripController_ =
       [[CTTabStripController alloc] initWithView:self.tabStripView
@@ -150,6 +165,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   // subclasses could override this to provie a custom nib
   NSString *windowNibPath = [CTUtil pathForResource:@"BrowserWindow"
                                              ofType:@"nib"];
+
   return [self initWithWindowNibPath:windowNibPath browser:browser];
 }
 
@@ -242,6 +258,40 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   return phase;
 }
 
+// If the browser is in incognito mode, install the image view to decorate
+// the window at the upper right. Use the same base y coordinate as the
+// tab strip.
+- (void)installIncognitoBadge {
+    // Only install if this browser window is OTR and has a tab strip.
+    if (![browser_ isOffTheRecord] || ![self hasTabStrip])
+        return;
+    
+    NSAutoreleasePool* pool = [NSAutoreleasePool new];
+#define PIMG(name) [[NSImage imageInAppOrCTFrameworkNamed:name] retain]
+    
+    // Install the image into the badge view and size the view appropriately.
+    // Hide it for now; positioning and showing will be done by the layout code.
+    NSImage* image = PIMG(@"otr_icon.pdf");
+    incognitoBadge_.reset([[IncognitoImageView alloc] init]);
+    [incognitoBadge_ setImage:image];
+    [incognitoBadge_ setFrameSize:[image size]];
+    [incognitoBadge_ setAutoresizingMask:NSViewMinXMargin | NSViewMinYMargin];
+    [incognitoBadge_ setHidden:YES];
+    
+    // Give it a shadow.
+    scoped_nsobject<NSShadow> shadow([[NSShadow alloc] init]);
+    [shadow.get() setShadowColor:[NSColor colorWithCalibratedWhite:0.0
+                                                             alpha:0.5]];
+    [shadow.get() setShadowOffset:NSMakeSize(0, -1)];
+    [shadow setShadowBlurRadius:2.0];
+    [incognitoBadge_ setShadow:shadow];
+    
+    // Install the view.
+    [[[[self window] contentView] superview] addSubview:incognitoBadge_];
+    
+#undef PIMG
+    [pool drain];
+}
 
 #pragma mark -
 #pragma mark Actions
@@ -353,6 +403,13 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 // Accept tabs from a CTBrowserWindowController with the same Profile.
 - (BOOL)canReceiveFrom:(CTTabWindowController*)source {
   if (![source isKindOfClass:[isa class]]) {
+    return NO;
+  }
+
+  CTBrowserWindowController* sourceController = (CTBrowserWindowController*)source;
+  
+  // should be of the same profile. Right now, we only support OffTheRecord.
+  if ( [[sourceController browser] isOffTheRecord] != [browser_ isOffTheRecord] ) {
     return NO;
   }
 
@@ -481,7 +538,7 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   //    [tabStripModel->delegate() createNewStripWithContents:contents];
 
   // New browser
-  CTBrowser* newBrowser = [[browser_ class] browser];
+  CTBrowser* newBrowser = [[browser_ class] browserWithMode:[browser_ isOffTheRecord]];
 
   // Create a new window controller with the browser.
   CTBrowserWindowController* controller =
@@ -781,6 +838,8 @@ static CTBrowserWindowController* _currentMain = nil; // weak
 #pragma mark -
 #pragma mark Private
 
+// Space between the incognito badge and the right edge of the window.
+const CGFloat kIncognitoBadgeOffset = 18;
 
 - (CGFloat)layoutTabStripAtMaxY:(CGFloat)maxY
                           width:(CGFloat)width
@@ -790,9 +849,10 @@ static CTBrowserWindowController* _currentMain = nil; // weak
     return maxY;
 
   NSView* tabStripView = [self tabStripView];
+  CGFloat tabStripWidth = incognitoBadge_.get() ? width - (kIncognitoBadgeOffset + 8) : width;
   CGFloat tabStripHeight = NSHeight([tabStripView frame]);
   maxY -= tabStripHeight;
-  [tabStripView setFrame:NSMakeRect(0, maxY, width, tabStripHeight)];
+  [tabStripView setFrame:NSMakeRect(0, maxY, tabStripWidth, tabStripHeight)];
 
   // Set indentation.
   [tabStripController_ setIndentForControls:(fullscreen ? 0 :
@@ -803,13 +863,13 @@ static CTBrowserWindowController* _currentMain = nil; // weak
   [tabStripController_ layoutTabsWithoutAnimation];
 
   // Now lay out incognito badge together with the tab strip.
-  //if (incognitoBadge_.get()) {
-  //  // Actually place the badge *above* |maxY|.
-  //  NSPoint origin = NSMakePoint(width - NSWidth([incognitoBadge_ frame]) -
-  //                                   kIncognitoBadgeOffset, maxY);
-  //  [incognitoBadge_ setFrameOrigin:origin];
-  //  [incognitoBadge_ setHidden:NO];  // Make sure it's shown.
-  //}
+  if (incognitoBadge_.get()) {
+    // Actually place the badge *above* |maxY|.
+    NSPoint origin = NSMakePoint(width - NSWidth([incognitoBadge_ frame]) -
+                                     kIncognitoBadgeOffset, maxY);
+    [incognitoBadge_ setFrameOrigin:origin];
+    [incognitoBadge_ setHidden:NO];  // Make sure it's shown.
+  }
 
   return maxY;
 }

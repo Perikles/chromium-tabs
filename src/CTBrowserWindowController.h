@@ -6,6 +6,7 @@
 
 @class CTTabStripController;
 @class CTToolbarController;
+@class IncognitoImageView;
 //class CTTabStripModelObserverBridge;
 
 @interface NSDocumentController (CTBrowserWindowControllerAdditions)
@@ -30,6 +31,9 @@
   BOOL enteringFullscreen_;
   // True at -windowShouldClose.
   BOOL closingTabs_;
+  // The view which shows the incognito badge (NULL if not an incognito window).
+  // Needed to access the view to move it to/from the fullscreen window.
+  scoped_nsobject<IncognitoImageView> incognitoBadge_;
 }
 
 @property(readonly, nonatomic) CTTabStripController *tabStripController;

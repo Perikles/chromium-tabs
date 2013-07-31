@@ -20,6 +20,7 @@ class CTTabStripModel;
 
 @interface CTBrowser : NSObject <CTTabStripModelDelegate, NSFastEnumeration> {
   CTTabStripModel *tabStripModel_;
+  BOOL offTheRecord_;
 @public
   // Important: Don't ever change this value from user code. It's public just
   // so that the internal machinery can set it at the appropriate time.
@@ -39,8 +40,16 @@ class CTTabStripModel;
 // @autoreleased
 +(CTBrowser*)browser;
 
+// Create a new browser with a window.
+// Allows us to specify isOffTheRecord.
+// @autoreleased
++(CTBrowser*)browserWithMode:(BOOL)offTheRecord;
+
 // init
 -(id)init;
+
+// init specifying isOffTheRecord.
+-(id)initWithMode:(BOOL)offTheRecord;
 
 // Create a new toolbar controller. The default implementation will create a
 // controller loaded with a nib called "Toolbar". If the nib can't be found in
@@ -74,6 +83,9 @@ class CTTabStripModel;
 -(CTTabContents*)addTabContents:(CTTabContents*)contents
                    inForeground:(BOOL)foreground;
 -(CTTabContents*)addTabContents:(CTTabContents*)contents; // inForeground:YES
+
+// Are we caching on disk?
+-(BOOL)isOffTheRecord;
 
 // Commands -- TODO: move to CTBrowserWindowController
 -(void)newWindow;

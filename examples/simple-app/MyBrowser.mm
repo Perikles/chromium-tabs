@@ -11,4 +11,8 @@
       initWithBaseTabContents:baseContents] autorelease];
 }
 
+-(BOOL)isOffTheRecord {
+  return NO;
+}
+
 @end

@@ -13,7 +13,7 @@ typedef enum {
   CTBrowserCommandGoBack                    = 33000,
   CTBrowserCommandGoForward                 = 33001,
   CTBrowserCommandReload                    = 33002,
-  CTBrowserCommandReloadIgnoreCache         = 34002,
+  CTBrowserCommandReloadIgnoreCache         = 33007,
   CTBrowserCommandGoHome                    = 33003,
   CTBrowserCommandNavigate                  = 33004,
   CTBrowserCommandNewWindow                 = 34000,
