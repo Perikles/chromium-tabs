@@ -47,7 +47,7 @@ extern NSString *const CTTabContentsDidCloseNotification;
   NSString *title_; // title of this tab
   NSImage *icon_; // tab icon (nil means no or default icon)
   CTBrowser *browser_;
-  __weak CTTabContents* parentOpener_; // the tab which opened this tab (unless nil)
+  CTTabContents* parentOpener_; // the tab which opened this tab (unless nil)
 }
 
 @property(assign, nonatomic) BOOL isApp;

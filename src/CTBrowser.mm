@@ -178,7 +178,7 @@
   // Create a new browser & window when we start
   Class cls = self.windowController ? [self.windowController class] :
                                       [CTBrowserWindowController class];
-  CTBrowser *browser = [isa browser];
+  CTBrowser *browser = [[self class] browser];
   CTBrowserWindowController* windowController =
       [[cls alloc] initWithBrowser:browser];
   [browser addBlankTabInForeground:YES];
@@ -366,7 +366,7 @@
   //  dock_info.AdjustOtherWindowBounds();
 
   // Create an empty new browser window the same size as the old one.
-  CTBrowser* browser = [isa browser];
+  CTBrowser* browser = [[self class] browser];
   browser.tabStripModel->AppendTabContents(contents, true);
   [browser loadingStateDidChange:contents];
 

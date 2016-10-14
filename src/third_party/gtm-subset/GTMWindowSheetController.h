@@ -56,9 +56,9 @@
 
 @interface GTMWindowSheetController : NSObject {
  @private
-  __weak NSWindow* window_;
-  __weak NSView* activeView_;
-  __weak id <GTMWindowSheetControllerDelegate> delegate_;
+  NSWindow* window_;
+  NSView* activeView_;
+  id <GTMWindowSheetControllerDelegate> delegate_;
 
   NSMutableDictionary* sheets_;  // NSValue*(NSView*) -> SheetInfo*
 }

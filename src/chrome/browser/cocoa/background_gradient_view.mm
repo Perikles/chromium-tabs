@@ -41,8 +41,8 @@ static NSColor* kDefaultColorToolbarStrokeInactive = nil;
 
 + (void)load {
   NSAutoreleasePool* pool = [NSAutoreleasePool new];
-  _gradientFaded = _mkGradient(true);
-  _gradientNotFaded = _mkGradient(false);
+  //_gradientFaded = _mkGradient(true);
+  //_gradientNotFaded = _mkGradient(false);
   kDefaultColorToolbarStroke =
     [NSColor colorWithCalibratedWhite: 0x67 / 0xff alpha:1.0];
   kDefaultColorToolbarStrokeInactive =
@@ -68,6 +68,12 @@ static NSColor* kDefaultColorToolbarStrokeInactive = nil;
 }
 
 - (void)drawBackground {
+  if (!_gradientFaded)
+    _gradientFaded = _mkGradient(true);
+    
+  if (!_gradientNotFaded) {
+    _gradientNotFaded = _mkGradient(false);
+  }
   NSGradient *gradient = [[self window] isKeyWindow] ? _gradientNotFaded :
                                                        _gradientFaded;
   CGFloat winHeight = NSHeight([[self window] frame]);

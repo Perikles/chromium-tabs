@@ -124,9 +124,9 @@
 		3ABF4A8B12A461630020233C /* scoped_nsautorelease_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4A8912A461630020233C /* scoped_nsautorelease_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ABF4A8C12A461630020233C /* scoped_nsautorelease_pool.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3ABF4A8A12A461630020233C /* scoped_nsautorelease_pool.mm */; };
 		3ABF4AAC12A465100020233C /* KVOChangeScope.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3ABF4AAB12A464F50020233C /* KVOChangeScope.hh */; settings = {ATTRIBUTES = (Public, ); }; };
+		EC115C1E1D5A75F2007CEC40 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC115C1D1D5A75F2007CEC40 /* Carbon.framework */; };
+		EC115C201D5A760A007CEC40 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC115C1F1D5A760A007CEC40 /* QuartzCore.framework */; };
 		ECCA546717A3EACF0039769F /* otr_icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = ECCA546617A3EACF0039769F /* otr_icon.pdf */; };
-		ECE13FBB175498F8008A1999 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE13FBA175498F8008A1999 /* Carbon.framework */; };
-		ECE13FBD17549912008A1999 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECE13FBC17549912008A1999 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,9 +281,9 @@
 		3AEE19521222DDEB009DA438 /* CTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTTabContents.h; sourceTree = "<group>"; };
 		3AEE19531222DDEB009DA438 /* CTTabContents.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CTTabContents.mm; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Chromium Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chromium Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC115C1D1D5A75F2007CEC40 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		EC115C1F1D5A760A007CEC40 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		ECCA546617A3EACF0039769F /* otr_icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = otr_icon.pdf; sourceTree = "<group>"; };
-		ECE13FBA175498F8008A1999 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
-		ECE13FBC17549912008A1999 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,9 +291,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC115C201D5A760A007CEC40 /* QuartzCore.framework in Frameworks */,
+				EC115C1E1D5A75F2007CEC40 /* Carbon.framework in Frameworks */,
 				3A3ED9BE1225E320009E2908 /* Cocoa.framework in Frameworks */,
-				ECE13FBB175498F8008A1999 /* Carbon.framework in Frameworks */,
-				ECE13FBD17549912008A1999 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,8 +386,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				ECE13FBC17549912008A1999 /* QuartzCore.framework */,
-				ECE13FBA175498F8008A1999 /* Carbon.framework */,
+				EC115C1F1D5A760A007CEC40 /* QuartzCore.framework */,
+				EC115C1D1D5A75F2007CEC40 /* Carbon.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
@@ -857,7 +857,7 @@
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_ENABLE_OBJC_GC = supported;
+				GCC_ENABLE_OBJC_GC = "";
 				GCC_ENABLE_PASCAL_STRINGS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -875,7 +875,8 @@
 				INSTALL_PATH = "@rpath";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = ChromiumTabs;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -890,7 +891,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_GC = supported;
+				GCC_ENABLE_OBJC_GC = "";
 				GCC_ENABLE_PASCAL_STRINGS = NO;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SSE41_EXTENSIONS = YES;
@@ -919,7 +920,8 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = ChromiumTabs;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -960,7 +962,7 @@
 					"$(OTHER_CFLAGS)",
 				);
 				PRODUCT_NAME = "Chromium Tabs";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -998,7 +1000,7 @@
 					"$(OTHER_CFLAGS)",
 				);
 				PRODUCT_NAME = "Chromium Tabs";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -1013,7 +1015,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1025,8 +1027,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
